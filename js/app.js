@@ -100,3 +100,11 @@ function renderizarTarjetas(listaPersonajes) {
 
         contenedorPersonajes.appendChild(columna);
     });
+    // Respuesta del botón ver detalle al hacer click
+    document.querySelectorAll(".btn-ver-detalle").forEach((boton) => {
+        boton.addEventListener("click", (evento) => {
+            const id = evento.target.getAttribute("data-id");
+            obtenerDetallePersonaje(id);
+        });
+    });
+}
