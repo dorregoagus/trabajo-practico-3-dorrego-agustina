@@ -108,3 +108,27 @@ function renderizarTarjetas(listaPersonajes) {
         });
     });
 }
+// se muestra modal de detalle del personaje
+function mostrarModalDetalle(personaje) {
+    const urlImagen = `${URL_CDN_IMAGENES}${personaje.portrait_path}`;
+    const estado = personaje.status;
+    const claseBadge = estado === "Alive" ? "badge-alive" : "badge-deceased";
+
+    // se obtiene una frase del personaje si tiene, sino se muestra un mensaje por defecto
+    const frase =
+        personaje.phrases && personaje.phrases.length > 0
+            ? personaje.phrases[0]
+            : "Este personaje no tiene frases registradas.";
+
+    modalDetalleBody.innerHTML = `
+    <img src="${urlImagen}" alt="${personaje.name}" onerror="this.src='https://placehold.co/400x300?text=Sin+imagen'">
+    <h4>${personaje.name}</h4>
+    <p><strong>Edad:</strong> ${personaje.age ?? "Desconocida"}</p>
+    <p><strong>Fecha de nacimiento:</strong> ${personaje.birthdate ?? "Desconocida"}</p>
+    <p><strong>Género:</strong> ${personaje.gender ?? "Desconocido"}</p>
+    <p><strong>Ocupación:</strong> ${personaje.occupation ?? "Desconocida"}</p>
+    <span class="badge ${claseBadge} mb-2">${estado}</span>
+    <p class="frase-personaje">"${frase}"</p>`;
+
+    modalDetalle.show();
+}
