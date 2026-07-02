@@ -147,3 +147,15 @@ function filtrarPersonajes() {
         personaje.name.toLowerCase().includes(textoBuscado));
     renderizarTarjetas(resultados);
 }
+// limpiar tarjetas y mensaje de alerta
+function limpiarResultados() {
+    contenedorPersonajes.innerHTML = "";
+    mensajeAlerta.innerHTML = "";
+}
+// mensaje de alerta de bootstrap
+function mostrarMensaje(texto, tipo) {
+    mensajeAlerta.innerHTML = `
+    <div class="alert alert-${tipo} py-2" role="alert">
+    ${texto}
+    </div>`;
+}
