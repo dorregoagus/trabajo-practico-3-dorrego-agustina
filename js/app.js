@@ -108,3 +108,70 @@ function renderizarTarjetas(listaPersonajes) {
         });
     });
 }
+// se muestra modal de detalle del personaje
+function mostrarModalDetalle(personaje) {
+    const urlImagen = `${URL_CDN_IMAGENES}${personaje.portrait_path}`;
+    const estado = personaje.status;
+    const claseBadge = estado === "Alive" ? "badge-alive" : "badge-deceased";
+
+    // se obtiene una frase del personaje si tiene, sino se muestra un mensaje por defecto
+    const frase =
+        personaje.phrases && personaje.phrases.length > 0
+            ? personaje.phrases[0]
+            : "Este personaje no tiene frases registradas.";
+
+    modalDetalleBody.innerHTML = `
+    <img src="${urlImagen}" alt="${personaje.name}" onerror="this.src='https://placehold.co/400x300?text=Sin+imagen'">
+    <h4>${personaje.name}</h4>
+    <p><strong>Edad:</strong> ${personaje.age ?? "Desconocida"}</p>
+    <p><strong>Fecha de nacimiento:</strong> ${personaje.birthdate ?? "Desconocida"}</p>
+    <p><strong>Género:</strong> ${personaje.gender ?? "Desconocido"}</p>
+    <p><strong>Ocupación:</strong> ${personaje.occupation ?? "Desconocida"}</p>
+    <span class="badge ${claseBadge} mb-2">${estado}</span>
+    <p class="frase-personaje">"${frase}"</p>`;
+
+    modalDetalle.show();
+}
+// buscador sin llamar a la API de nuevo
+function filtrarPersonajes() {
+    const textoBuscado = inputBuscar.value.trim().toLowerCase();
+
+    // se valida que el campo no esté vacío antes de filtrar
+    if (textoBuscado === "") {
+        mostrarMensaje("Escribe un nombre para buscar.", "warning");
+        return;
+    }
+
+    // .filter() recorre el arreglo "personajes" y devuelve solo los que cumplen la condición (que el nombre incluya el texto buscado)
+    const resultados = personajes.filter((personaje) =>
+        personaje.name.toLowerCase().includes(textoBuscado));
+    renderizarTarjetas(resultados);
+}
+// limpiar tarjetas y mensaje de alerta
+function limpiarResultados() {
+    contenedorPersonajes.innerHTML = "";
+    mensajeAlerta.innerHTML = "";
+}
+// mensaje de alerta de bootstrap
+function mostrarMensaje(texto, tipo) {
+    mensajeAlerta.innerHTML = `
+    <div class="alert alert-${tipo} py-2" role="alert">
+    ${texto}
+    </div>`;
+}
+// eventos con interacción del usuario
+btnBuscar.addEventListener("click", filtrarPersonajes);
+
+// Permitir buscar también apretando "Enter" en el input
+inputBuscar.addEventListener("keydown", (evento) => {
+  if (evento.key === "Enter") {
+    filtrarPersonajes();
+  }
+});
+
+btnLimpiar.addEventListener("click", () => {
+  inputBuscar.value = "";
+  renderizarTarjetas(personajes); // volvemos a mostrar todos
+});
+
+obtenerListadoPersonajes();
