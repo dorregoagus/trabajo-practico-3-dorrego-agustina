@@ -132,3 +132,18 @@ function mostrarModalDetalle(personaje) {
 
     modalDetalle.show();
 }
+// buscador sin llamar a la API de nuevo
+function filtrarPersonajes() {
+    const textoBuscado = inputBuscar.value.trim().toLowerCase();
+
+    // se valida que el campo no esté vacío antes de filtrar
+    if (textoBuscado === "") {
+        mostrarMensaje("Escribe un nombre para buscar.", "warning");
+        return;
+    }
+
+    // .filter() recorre el arreglo "personajes" y devuelve solo los que cumplen la condición (que el nombre incluya el texto buscado)
+    const resultados = personajes.filter((personaje) =>
+        personaje.name.toLowerCase().includes(textoBuscado));
+    renderizarTarjetas(resultados);
+}
