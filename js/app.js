@@ -62,3 +62,41 @@ async function obtenerDetallePersonaje(id) {
         console.error(error);
     }
 }
+function renderizarTarjetas(listaPersonajes) {
+    limpiarResultados(); // se limpia lo que había antes
+
+    // Si no hay resultados, se muestra un mensaje
+    if (listaPersonajes.length === 0) {
+        mostrarMensaje("No se encontraron personajes con ese nombre.", "warning");
+        return;
+    }
+
+    // se recorre el arreglo de personajes y por cada uno se arma una tarjeta
+    listaPersonajes.forEach((personaje) => {
+        const urlImagen = `${URL_CDN_IMAGENES}${personaje.portrait_path}`;
+        const estado = personaje.status; // "Alive" o "Deceased"
+        const claseBadge = estado === "Alive" ? "badge-alive" : "badge-deceased";
+
+        // Creamos la columna de Bootstrap
+        const columna = document.createElement("div");
+        columna.className = "col-12 col-sm-6 col-md-4 col-lg-3";
+        // backticks para armar el html de la tarjeta
+        columna.innerHTML = `
+      <div class="card tarjeta-personaje">
+        <img src="${urlImagen}" alt="${personaje.name}" onerror="this.src='https://placehold.co/400x300?text=Sin+imagen'">
+        <div class="card-body d-flex flex-column">
+          <h5 class="card-title">${personaje.name}</h5>
+          <p class="card-text mb-1"><strong>Ocupación:</strong> ${personaje.occupation || "Desconocida"}</p>
+          <span class="badge ${claseBadge} mb-3">${estado}</span>
+          <button
+            class="btn btn-primary mt-auto btn-ver-detalle"
+            data-id="${personaje.id}"
+          >
+            Ver detalle
+          </button>
+        </div>
+      </div>
+    `;
+
+        contenedorPersonajes.appendChild(columna);
+    });
