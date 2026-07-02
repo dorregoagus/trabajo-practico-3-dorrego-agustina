@@ -159,3 +159,19 @@ function mostrarMensaje(texto, tipo) {
     ${texto}
     </div>`;
 }
+// eventos con interacción del usuario
+btnBuscar.addEventListener("click", filtrarPersonajes);
+
+// Permitir buscar también apretando "Enter" en el input
+inputBuscar.addEventListener("keydown", (evento) => {
+  if (evento.key === "Enter") {
+    filtrarPersonajes();
+  }
+});
+
+btnLimpiar.addEventListener("click", () => {
+  inputBuscar.value = "";
+  renderizarTarjetas(personajes); // volvemos a mostrar todos
+});
+
+obtenerListadoPersonajes();
